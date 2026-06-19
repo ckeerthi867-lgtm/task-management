@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Management Application</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,sans-serif;
+        }
+
+        body{
+            background:#f4f4f4;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+        }
+
+        .container{
+            width:90%;
+            max-width:500px;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,0.2);
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:20px;
+            color:#333;
+        }
+
+        input, textarea{
+            width:100%;
+            padding:10px;
+            margin:10px 0;
+            border:1px solid #ccc;
+            border-radius:5px;
+        }
+
+        button{
+            padding:10px 15px;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+            margin-top:5px;
+        }
+
+        .add-btn{
+            background:green;
+            color:white;
+            width:100%;
+        }
+
+        .task{
+            background:#f9f9f9;
+            padding:10px;
+            margin-top:10px;
+            border-radius:5px;
+            border-left:5px solid blue;
+        }
+
+        .task h3{
+            margin-bottom:5px;
+        }
+
+        .completed{
+            text-decoration:line-through;
+            color:gray;
+            border-left-color:green;
+        }
+
+        .actions button{
+            margin-right:5px;
+        }
+
+        .complete-btn{
+            background:green;
+            color:white;
+        }
+
+        .delete-btn{
+            background:red;
+            color:white;
+        }
+
+        @media(max-width:600px){
+            .container{
+                width:95%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Task Manager</h1>
+
+    <input type="text" id="title" placeholder="Task Title">
+
+    <textarea id="description" placeholder="Task Description"></textarea>
+
+    <button class="add-btn" onclick="addTask()">
+        Add Task
+    </button>
+
+    <div id="taskList"></div>
+
+</div>
+
+<script>
+
+let tasks = [];
+
+function addTask(){
+
+    let title = document.getElementById("title").value;
+    let description = document.getElementById("description").value;
+
+    if(title === ""){
+        alert("Enter Task Title");
+        return;
+    }
+
+    let task = {
+        title:title,
+        description:description,
+        completed:false
+    };
+
+    tasks.push(task);
+
+    document.getElementById("title").value="";
+    document.getElementById("description").value="";
+
+    displayTasks();
+}
+
+function displayTasks(){
+
+    let taskList = document.getElementById("taskList");
+
+    taskList.innerHTML="";
+
+    tasks.forEach((task,index)=>{
+
+        taskList.innerHTML += `
+        <div class="task ${task.completed ? 'completed' : ''}">
+            <h3>${task.title}</h3>
+            <p>${task.description}</p>
+
+            <div class="actions">
+                <button class="complete-btn"
+                onclick="toggleTask(${index})">
+                ${task.completed ? 'Undo' : 'Complete'}
+                </button>
+
+                <button class="delete-btn"
+                onclick="deleteTask(${index})">
+                Delete
+                </button>
+            </div>
+        </div>
+        `;
+    });
+}
+
+function toggleTask(index){
+    tasks[index].completed = !tasks[index].completed;
+    displayTasks();
+}
+
+function deleteTask(index){
+    tasks.splice(index,1);
+    displayTasks();
+}
+
+</script>
+
+</body>
+</html>
